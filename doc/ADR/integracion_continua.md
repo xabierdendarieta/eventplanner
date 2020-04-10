@@ -7,7 +7,7 @@ Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
 ### Procesos
 
 * Uso de ramas en el respositorio
-  * Al tener un proyecto pequeño, se ha considerado no ramificar el repositorio. Se trabajará todo sobre la rama Master.
+  * Siguiendo la filosofia de la integración continua, se ha considerado no ramificar el repositorio. Se trabajará todo sobre la rama Master.
 
 * Pasos previos a la implementación de la aplicación
   * Se debe tener instalado la herramienta Jenkins
