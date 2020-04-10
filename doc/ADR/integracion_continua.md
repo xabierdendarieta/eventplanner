@@ -16,12 +16,15 @@ Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
 
 * Implementación de la aplicación
   * Cualquier cambio realizado en la aplicación se actualiza en la rama Master. No se realizan ramificaciones.
-  * Se lanzan los test unitarios sobre la rama Master
-    * Si los test unitarios son satisfactorios
+  
+  * Tests de integración: comprobar que los cambios realizados no entren en conflicto con partes ya realizadas. Se debe realizar un test por cada nuevo cambio en el código desarrollado.
+
+		* Tests unitarios: definir _scripts_ simples para comprobar el correcto funcionamiento del código implementado. Se debe realizar un test por cada nuevo cambio en el código desarrollado y lanzarlos sobre rama Master.
+   * Si los test unitarios son satisfactorios:
       * Se genera un ejecutable
       * Se genera el correspondiente contenedor con Docker
-    * Si los test unitarios NO son satisfactorios
-      * Se revisa los test unitarios paras aplicar las respectivas correcciones
+    * Si los test unitarios NO son satisfactorios:
+      * Se revisa los test unitarios paras aplicar las respectivas correcciones.
 
 
 ## Opciones consideradas
@@ -125,7 +128,8 @@ Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
 
 2. Para el despliegue de la aplicación se ha decido usar **Docker** porque es una herramienta que todo el equipo conoce y la instalación del mismo es fácil y rápida.
 
-3. Se decide del mismo modo que no es necesario realizar tests de rendimiento, debido a que el alcance del proyecto no es tan amplio como para registrar un gran flujo de usuarios o peticiones del servicio.
+3. Se decide que no es necesario realizar tests de rendimiento (comprobaciones de que el sistema mantiene el servicio en momentos de gran afluencia de usuarios o peticiones). 
+    * Se consideran actualmente omisibles debido a que el sistema no se encontrá en situaciones de tal envergadura, en principio, luego el tiempo dedicado a diseñar los tests y probarlos con cada cambio significativo en el servicio, no parece razonable. Esta decisión podría cambiar si se dispusiera de tiempo suficiente al final del proyecto para realizar un estudio rigurosa de la escalabilidad de nuestro sistema, aunque por ahora, como se ha dicho, no es lo más relevante.
 
 ## Estado
 (Tachar las que no apliquen)
