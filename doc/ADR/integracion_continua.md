@@ -18,13 +18,13 @@ Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
   * Cualquier cambio realizado en la aplicación se actualiza en la rama Master. No se realizan ramificaciones.
   
   * Tests de integración: comprobar que los cambios realizados no entren en conflicto con partes ya realizadas. Se debe realizar un test por cada nuevo cambio en el código desarrollado.
-
-		* Tests unitarios: definir _scripts_ simples para comprobar el correcto funcionamiento del código implementado. Se debe realizar un test por cada nuevo cambio en el código desarrollado y lanzarlos sobre rama Master.
-   * Si los test unitarios son satisfactorios:
-      * Se genera un ejecutable
-      * Se genera el correspondiente contenedor con Docker
-    * Si los test unitarios NO son satisfactorios:
-      * Se revisa los test unitarios paras aplicar las respectivas correcciones.
+  
+  * Tests unitarios: definir _scripts_ simples para comprobar el correcto funcionamiento del código implementado. Se debe realizar un test por cada nuevo cambio en el código   desarrollado y lanzarlos sobre rama Master.
+  * Si los test unitarios son satisfactorios:
+    * Se genera un ejecutable
+    * Se genera el correspondiente contenedor con Docker
+  * Si los test unitarios NO son satisfactorios:
+    * Se revisa los test unitarios paras aplicar las respectivas correcciones.
 
 
 ## Opciones consideradas
