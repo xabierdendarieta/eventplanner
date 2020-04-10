@@ -28,7 +28,7 @@ Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
 
 1. Integración continua
 
-    Las herramientas consideradas para la integración contnu no solo se diferencian por sus características, si no que también por sus precios y licencias. 
+    Las herramientas consideradas para la integración continua no sólo se diferencian por sus características, sino que también por sus precios y licencias. 
   
     * Jenkins
 
@@ -90,7 +90,7 @@ Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
       | Licencia                 | MIT              | MIT                         | De propietario                                       | MIT/EE     |
       | Precio versión comercial | -                | 69-489 $/mes                | 10 - 126 500 $ (pago único)                          | 4-99 $/mes | 
       | Versión gratuita         | &check;          | &check;                     |&check;                                               | &check;    |
-      | Particularidades         | Numerosos plugis | Conexión directa con GitHub | Conexión directa con<br>otros productos de Atlassian |            |
+      | Particularidades         | Numerosos plugins | Conexión directa con GitHub | Conexión directa con<br>otros productos de Atlassian |            |
 
 
 
@@ -115,11 +115,11 @@ Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
     | Límite de contenedores        | 95000                                                 | 300000                                    |
     | Multiplataforma               | &check;                                               | &check;                                   |
     | Tiempo de creación            | Pocos segundos                                        | Minutos                                   |
-    | Tiempo de arranque            | Milesimas de segundo<br>o<br>unos pocos segundos      | Minutos                                   |
+    | Tiempo de arranque            | Milésimas de segundo<br>o<br>unos pocos segundos      | Minutos                                   |
   
 
 ## Decisión
-1. Para la **integración continua**, se ha decidido usar **Jetkins** porque es una herramienta gratuita (en comparación a las otras tres aplicaciones), es compatible con muchos sistemas de control de versiones (en nuestro caso usaremos GitHub) y dispone de numerosos plugins. Además, existe la disposición de *Pipelines* para los tests de integración.
+1. Para la **integración continua**, se ha decidido usar **Jenkins** porque es una herramienta gratuita (en comparación a las otras tres aplicaciones), es compatible con muchos sistemas de control de versiones (en nuestro caso usaremos GitHub) y dispone de numerosos plugins. Además, existe la disposición de *Pipelines* para los tests de integración.
   
     Se podría haber decidido usar **Travis CI** por la conexión directa con GitHub, pero la condición para ser una herramienta gratuita es que el proyecto sea de código abierto y el nuestro no lo es.
 
