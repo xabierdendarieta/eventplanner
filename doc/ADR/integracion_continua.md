@@ -5,7 +5,24 @@ Se necesita definir una serie de herramientas capaces de proporcionar una forma 
 Asimismo, deben posibilitar que una vez integrados, todo funcione correctamente.
 
 ### Procesos
-Describir los procesos que queremos poder realizar, de modo que necesitemos este ADR para definir qué se va a utilizar para conseguirlo.
+
+* Uso de ramas en el respositorio
+  * Al tener un proyecto pequeño, se ha considerado no ramificar el repositorio. Se trabajará todo sobre la rama Master.
+
+* Pasos previos a la implementación de la aplicación
+  * Se debe tener instalado la herramienta Jenkins
+  * Se debe crear un pipeline en la herramienta Jenkins
+  * Se debe tener instalado Docker
+
+* Implementación de la aplicación
+  * Cualquier cambio realizado en la aplicación se actualiza en la rama Master. No se realizan ramificaciones.
+  * Se lanzan los test unitarios sobre la rama Master
+    * Si los test unitarios son satisfactorios
+      * Se genera un ejecutable
+      * Se genera el correspondiente contenedor con Docker
+    * Si los test unitarios NO son satisfactorios
+      * Se revisa los test unitarios paras aplicar las respectivas correcciones
+
 
 ## Opciones consideradas
 
