@@ -23,13 +23,9 @@ Se requiere de una herramienta donde almacenar los archivos relacionados con el 
 	* Realizar peticiones de cambios (_pull requests_), no actualizar sin control.
 
 * Realización de pruebas sobre el código desarrollado:
-	* Lanzar desde el acceso al repositorio los _tests_ pertinentes para la comprobación del código desarrollado.
-		* Tests de integración: comprobar que los cambios realizados no entren en conflicto con partes ya realizadas. Se debe realizar un test por cada nuevo cambio en el código desarrollado.
-
-		* Tests unitarios: definir _scripts_ simples para comprobar el correcto funcionamiento del código implementado. Se debe realizar un test por cada nuevo cambio en el código desarrollado. (que cada función o pequeño script, realizar una función que la pruebe y compruebe que funciona bien).
-
-		* Tests de rendimiento: comprobar que el sistema mantiene el servicio en momentos de gran afluencia de usuarios o peticiones. Se consideran actualmente omisibles debido a que el sistema no se encontrá en situaciones de tal envergadura, en principio, luego el tiempo dedicado a diseñar los tests y probarlos con cada cambio significativo en el servicio, no parece razonable. Esta decisión podría cambiar si se dispusiera de tiempo suficiente al final del proyecto para realizar un estudio rigurosa de la escalabilidad de nuestro sistema, aunque por ahora, como se ha dicho, no es lo más relevante.
-
+	* Lanzar desde el acceso al repositorio (rama _master_) los tests pertinentes (tanto de integración como unitarios) para la comprobación del código desarrollado cada vez que se genere un cambio significativo.
+		
+		
 ## Opciones consideradas
 1. GitHub:
 	* Pros:
