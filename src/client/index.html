@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>EventPlanner</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=devide-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<script src="js/functions.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" onclick="loadHome()">EventPlanner</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="navbar">
+				<ul class="nav navbar-nav">
+					<li class="active" id="navbar-home"><a onclick="loadHome()"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+					<li id="navbar-new"><a onclick="loadNew()"><span class="glyphicon glyphicon-plus"></span> New Event</a></li>
+					<li id="navbar-list"><a onclick="loadList()"><span class="glyphicon glyphicon-list"></span> My Events</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right" id="navbar-state-login" style="display: none">
+					<li id="navbar-login"><a onclick="loadLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right" id="navbar-state-user" style="display: none">
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">User Name
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li id="navbar-user"><a onclick="loadUser()"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+							<!-- <br> -->
+							<li id="navbar-logout"><a onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container content" style="margin-top:70px">
+		<div class="row" style="display: none" id="home">
+			<div class="jumbotron col-sm-12">
+				<h1>EventPlanner</h1>
+				<p>The solution you need to make events</p>
+			</div>
+			<div class="col-sm-8">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+
+			<div class="col-sm-4">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+		</div>
+
+		<div class="row" style="display: none" id="new">
+			<div class="col-sm-offset-2 col-sm-10">
+				<h1>New Event</h1>
+			</div>
+			<form class="form-horizontal" action="">
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="eventname">Event Name:</label>
+					<div class="col-sm-10">
+						<input id="eventname" type="text" class="form-control" placeholder="Event Name">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="date">Date:</label>
+					<div class="col-sm-4">
+						<input id="date" type="text" class="form-control" placeholder="Date">
+					</div>
+					<label class="control-label col-sm-2" for="time">Time:</label>
+					<div class="col-sm-4">
+						<input id="time" type="text" class="form-control" placeholder="Time">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="description">Description:</label>
+					<div class="col-sm-10">
+						<textarea id="description" class="form-control" placeholder="Description" rows="5"></textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="row" style="display: none" id="event">
+			<div class="col-sm-6">
+				<h2>Event Name<br><small>YYYY/MM/DD hh:mm</small></h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+
+			<div class="col-sm-6">
+				<table class="table table-striped">
+					<thead>
+						<th class="col-sm-11 col-xs-11">Assistings</th>
+						<th class="col-sm-1 col-xs-1"></th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>User 1</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 2</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 3</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 4</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 5</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 6</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 7</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 8</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td>User 9</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row" style="display: none" id="list">
+			<div class="col-sm-12">
+				<table class="table table-striped">
+					<thead>
+						<th class="col-sm-6 col-xs-6">Event</th>
+						<th class="col-sm-4 col-xs-4">Date</th>
+						<th class="col-sm-1 col-xs-1">Cnt</th>
+						<th class="col-sm-1 col-xs-1"></th>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 1</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 2</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 3</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 4</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 5</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 6</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 7</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 8</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+						<tr>
+							<td><a onclick="loadEvent(this)">Event 9</a></td>
+							<td>YYYY/MM/DD hh:mm</td>
+							<td>42</td>
+							<td>
+								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row" style="display: none" id="user">
+			<div class="col-sm-offset-2 col-sm-8">
+				<h1>User info</h1>
+			</div>
+			<form class="form-horizontal" action="">
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+							<input id="email" type="text" class="form-control"placeholder="Email">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="username" type="text" class="form-control" placeholder="Name">
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<button type="submit" class="btn btn-primary" onclick="">Change</button>
+						<button type="submit" class="btn btn-default" onclick="">Discard</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="row" style="display: none" id="login">
+			<div class="col-sm-offset-2 col-sm-8">
+				<h1>Sign Up / Login</h1>
+			</div>
+			<form class="form-horizontal" action="">
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+							<input id="email" type="text" class="form-control"placeholder="Email">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="username" type="text" class="form-control" placeholder="Name">
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<button type="submit" class="btn btn-primary" onclick="login()">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<!-- <footer class="navbar navbar-inverse navbar-fixed-bottom">
+		<div class="container-fluid">
+			<div class="navbar-header center">
+				<a class="navbar-brand" href="#">EventPlanner</a>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">About us</a></li>
+			</ul>
+		</div>
+	</footer> -->
+
+</body>
+</html>
