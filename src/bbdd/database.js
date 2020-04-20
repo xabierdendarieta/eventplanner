@@ -25,6 +25,7 @@ bdSocket.connect(host);
 bdSocket.on('message', async (_, message) => {
 	// Mensaje a JSON
 	let mensaje = JSON.parse(message.toString());
+	let id = mensaje["id"];
 
 	// Comprobar operacion a realizar
 	let op = mensaje['op'];
@@ -32,7 +33,7 @@ bdSocket.on('message', async (_, message) => {
 	let res;
 	if (op == 'put') {
 		// Introducir valores
-		db.put(cuerpo.clave, cuerpo.valor, function(err) {
+		await db.put(cuerpo.clave, cuerpo.valor, function(err) {
 			if (err) {
 				res = 'error';
 			} else {
@@ -45,9 +46,9 @@ bdSocket.on('message', async (_, message) => {
 		await promesa.then((value) => {
 			res = value;
 		});
-	} else if (op == 'delete') {
+	} else if (op == 'del') {
 		// Eliminar valores
-		db.del(cuerpo.clave, function(err) {
+		await db.del(cuerpo.clave, function(err) {
 			if (err) {
 				res = 'error';
 			} else {
@@ -56,6 +57,12 @@ bdSocket.on('message', async (_, message) => {
 		});
 	} else {
 		// Opcion invalida o no definida
-		return -1;
+		res = -1;
 	}
+
 });
+
+// Enviar respuesta
+let m = {'res':res};
+m = JSON.stringify(m);
+bdSocket.send([id,' ',m]);
