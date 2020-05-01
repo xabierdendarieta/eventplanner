@@ -20,12 +20,15 @@ let bdSocket = zmq.socket('dealer');
 let host = 'tcp://' + ip + ':' + puerto;
 bdSocket.identity = "bd";
 bdSocket.connect(host);
+console.log("Escuchando en... "+host);
 
 // Escuchar peticiones
 bdSocket.on('message', async (_, message) => {
 	// Mensaje a JSON
 	let mensaje = JSON.parse(message.toString());
 	let id = mensaje["id"];
+    console.log("Mensaje de: "+id);
+    console.log(mensaje);
 
 	// Comprobar operacion a realizar
 	let op = mensaje['op'];
@@ -33,27 +36,30 @@ bdSocket.on('message', async (_, message) => {
 	let res;
 	if (op == 'put') {
 		// Introducir valores
-		await db.put(cuerpo.clave, cuerpo.valor, function(err) {
+		await db.put(cuerpo['clave'], cuerpo['valor'], function(err) {
 			if (err) {
 				res = 'error';
 			} else {
 				res = 'ok';
 			}
+			responder(res,id);
 		});
 	} else if (op == 'get') {
 		// Consultar valores
-		let promesa = db.get(cuerpo.clave);
+		let promesa = db.get(cuerpo['clave']);
 		await promesa.then((value) => {
 			res = value;
+            responder(res,id);
 		});
 	} else if (op == 'del') {
 		// Eliminar valores
-		await db.del(cuerpo.clave, function(err) {
+		await db.del(cuerpo['clave'], function(err) {
 			if (err) {
 				res = 'error';
 			} else {
 				res = 'ok';
 			}
+			responder(res,id);
 		});
 	} else {
 		// Opcion invalida o no definida
@@ -62,7 +68,10 @@ bdSocket.on('message', async (_, message) => {
 
 });
 
-// Enviar respuesta
-let m = {'res':res};
-m = JSON.stringify(m);
-bdSocket.send([id,' ',m]);
+function responder(res,id) {
+    // Enviar respuesta
+    let m = {'id':id, 'res':res};
+    m = JSON.stringify(m);
+    console.log(m);
+    bdSocket.send([' ',m]);
+}
