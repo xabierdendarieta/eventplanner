@@ -1,0 +1,60 @@
+Próximas entregas EventPlanner
+
+Mejoras ADRs ya definidos:
+	-> Sobre todo:
+		-> Integración Continua:
+			-> Parte de "Procesos", donde se especifica uso de ramas
+				y pasos previos:
+					-> Redactar mejor: como un proceso.
+
+			-> Incluir el proceso de despliegue cuando sea que lo definamos.
+
+	-> Gestión de la Configuración:
+		-> Añadir dónde y con qué política de nombres guardamos las actas de 
+			las reuniones.
+			
+-----> Fecha: entrega final del proyecto.
+
+ADR de Componentes Lógicos:
+	-> Puede ser un ADR o una parte del informe final en forma de captura
+		de requisitos.
+
+	-> Se trata de definir los requisitos no funcionales.
+
+	-> Hay que pensar en cómo se realizará el despliegue:
+		-> Máquinas diferentes para cada parte. 
+			-> O lo acorde a la arquitectura que planteamos al inicio.
+		-> Alta disponibilidad del servicio.
+		-> Si la carga aumenta, la aplicación debe poder escalar.
+		-> Si una máquina se cae, no se caiga el servicio.
+
+		-> Lo más barato posible.
+
+	-> A tener en cuenta que puede que los requisitos impliquen
+		balanceador de carga, pruebas de rendimiento, etc.
+
+-----> Fecha: primera versión --- 11 de mayo
+
+
+Plan de Sistemas:
+	-> Teniendo en cuenta los requisitos previamente definidos.
+
+	-> Referenciar temas como:
+		-> Si existe división entre "pre-producción" y "producción"
+			o se despliega directamente en esta última.
+		-> Cuando se despliega, en qué modo se hace.
+		-> Cuando se realiza un "commit" qué ocurre.
+			-> Si hay uno de nosotros designados para revisar el código, etc.
+
+	-> Definir la infraestructura completa que necesitaríamos si
+		diésemos el servicio de verdad:
+
+		1. Montaje de un Data Center físico (en la universidad, en casa,
+			en una nueva empresa).
+		2. Montaje con AWS.
+
+		-> Detalles: capacidad CPUs, memorias, etc. Todo sobre las máquinas.
+		-> Consejo: aprovechar AWS para hacernos una idea de qué es necesario,
+			precios, etc. y buscar similar en físico.
+
+-----> Fecha: sin previsión.
