@@ -1,77 +1,123 @@
 "use strict"
 
-// Importar librerias
+// Libraries
 let level = require('level');
 let zmq = require('zmq');
 
-// Crear base de datos
+// Create DB
 let db = level('./eventplanner');
 
 // Dos tipos de elementos (JSON en forma de strings)
-// evento = {"id":int, "titulo":string, "fechaHora":timestamp, "descripcion":string, "organizador":string, "asistentes":string[]}
-// usuario = {"mail":string,"id":string, "nombre":string}
+// evento = {"id":int, "name":string, "datetime":string, "description":string, "organizer":string, "assistants":string[]}
+// usuario = {"name":string, "password": string}
 
-// Ip y puerto en los que escucha la base de datos
-let ip = '127.0.0.1';
-let puerto = '1234';
+// IP and Port (if not args, select by default)
+let ip;
+let puerto;
+if (process.argv.length == 4) {
+	ip = process.argv[2];
+    puerto = process.argv[3];
+} else {
+	ip = '127.0.0.1';
+	puerto = '1234';
+}
 
-// Realizar conexion
+// Connection
 let bdSocket = zmq.socket('dealer');
 let host = 'tcp://' + ip + ':' + puerto;
 bdSocket.identity = "bd";
 bdSocket.connect(host);
-console.log("Escuchando en... "+host);
+console.log("Listening on... "+host);
 
-// Escuchar peticiones
-bdSocket.on('message', async (_, message) => {
-	// Mensaje a JSON
+// Listen 
+bdSocket.on("message", async (_, message) => {
+	// message received to JSON type
 	let mensaje = JSON.parse(message.toString());
-	let id = mensaje["id"];
-    console.log("Mensaje de: "+id);
-    console.log(mensaje);
 
-	// Comprobar operacion a realizar
-	let op = mensaje['op'];
-	let cuerpo = mensaje['arg']; // variara segun la operacion
-	let res;
-	if (op == 'put') {
-		// Introducir valores
-		await db.put(cuerpo['clave'], cuerpo['valor'], function(err) {
-			if (err) {
-				res = 'error';
-			} else {
-				res = 'ok';
-			}
-			responder(res,id);
-		});
-	} else if (op == 'get') {
-		// Consultar valores
-		let promesa = db.get(cuerpo['clave']);
-		await promesa.then((value) => {
-			res = value;
-            responder(res,id);
-		});
-	} else if (op == 'del') {
-		// Eliminar valores
-		await db.del(cuerpo['clave'], function(err) {
-			if (err) {
-				res = 'error';
-			} else {
-				res = 'ok';
-			}
-			responder(res,id);
-		});
+	// Check if user or event
+	let component = mensaje["component"];
+	let id = mensaje["id"];
+    let body;
+	if (component == "user") { 
+		body = mensaje["body"];
+		// let ok = checkUser(body);
+	} else if (component == "event") {
+		body = mensaje["body"];
+		// let ok = checkEvent(body);
 	} else {
-		// Opcion invalida o no definida
-		res = -1;
+		responder("No user, no event");
+		return;
 	}
 
+	// if (!ok) {
+	// 	responder("Security warning");
+	// 	return;
+	// } 
+
+	// Check type of operation
+	let op = body["op"];
+
+	if (op == "get") {
+		let res = await take(id);
+		//responder(res);
+		return;
+	} else if (op == "put") {
+		let args = body["arg"];
+		let res = await insert(id,args);
+//         console.log("hecho: ",res);
+// 		responder(res);
+// 		return;
+	} else {
+		responder("Wrong operation");
+		return;
+	}
 });
 
-function responder(res,id) {
-    // Enviar respuesta
-    let m = {'id':id, 'res':res};
+
+// Put values into DB
+const insert = async (id,args) => {
+	// Introducir valores
+	let resp;
+	let promiss = db.put(id, args);
+	await promiss
+		.then(() => {
+            responder("Done");
+			return "Done";
+		}).catch((error) => {
+			console.log("Put Error: " + error);
+            responder("Failed");
+			return "Failed";
+		});
+} 
+
+// Get values from DB
+const take = async (id) => {
+	// Consultar valores
+	let resp;
+	let promiss = db.get(id);
+	await promiss
+		.then((value) => {
+			resp = value;
+            responder(value);
+        	return value;
+        }).catch((error) => {
+        	console.log("Get Error: " + error);
+            responder("Failed");
+        	return "Failed";
+        });
+}
+
+// Send info to API
+function responder(res) {
+    let m = {"res":res};
     m = JSON.stringify(m);
     console.log(m);
     bdSocket.send([' ',m]);
+    return;
 }
+
+// Check for corrupt data in user args
+// function checkUser()
+
+// Check for corrupt data in event args
+// function checkEvent()
