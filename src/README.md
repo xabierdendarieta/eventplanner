@@ -1,2 +1,2 @@
-# Directorio 'source' (src)
+# Directorio 'Source' (src)
 Directorio para almanecar el código desarrollado.
