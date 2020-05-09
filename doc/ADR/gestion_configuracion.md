@@ -44,9 +44,9 @@ Se requiere de una herramienta donde almacenar los archivos relacionados con el 
 		* Se puede integrar con Trello (herramienta de gestión del equipo).
 		* Permite realizar _pull requests_.
 		* Posibilidad de integración con Jenkins (herramienta para integración continua).
-  * Cons:
-    * El equipo no está familiarizado con su uso.
-    * No se tienen cuentas ya registradas.
+	* Cons:
+		* El equipo no está familiarizado con su uso.
+		* No se tienen centas ya registradas.
 
 ## Decisión
 Se utiliza la herramienta **GitHub**.
