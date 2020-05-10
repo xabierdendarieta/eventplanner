@@ -1,31 +1,11 @@
-// Unit tests for DB
+// Unit Tests for DB
+"use strict"
 
-// Libraries
-let zmq = require('zmq');
+const database = require('./database');
 
-// Connection
-let ident = 'test';
-let tester = zmq.socket('dealer');
-// IP and Port (if not args, select by default)
-let ip;
-let puerto;
-if (process.argv.length == 4) {
-	ip = process.argv[2];
-	puerto = process.argv[3];
-} else {
-	ip = "127.0.0.1";
-	puerto = "1234";
-}
-let host = "tcp://" + ip + ":" + puerto; 
-tester.identity = ident;
-tester.bind(host);
-console.log("Connected to... " + host); 
-    
-// Input messages
-tester.on("message", (_,message) => { 
-    let mensaje = JSON.parse(message.toString());
-    let res = mensaje["res"];
-    // Check answers
+var cont = 0;
+
+function testing(res) {
     if (res === undefined) {
         console.log("Empty answer");
     } else if (res == "Failed") {
@@ -33,9 +13,27 @@ tester.on("message", (_,message) => {
     } else {
         console.log("Test passed");
     }
-    
-    return;
-});
+    cont = cont + 1;
+    if (cont == 4){
+        process.exit(0);
+    }
+}
+
+const indb = async(id,body) => {
+    let sol = database.insert(id,body);
+    await sol.then((value) => {
+        testing(value);
+        return;
+    });
+};
+
+const outdb = async(id) => {
+    let sol = database.take(id);
+    await sol.then((value) => {
+        testing(value);
+        return;
+    });
+};
 
 // Output messages
 let component;
@@ -46,45 +44,27 @@ let body;
 let m;
 
 // PUT user
-component = "user";
 id = "paco44";
 op = "put";
 args = {"password": "micasa"};
 args = JSON.stringify(args);
 body = {"op":op, "arg": args};
-m = {"component":component, "id":id, "body":body};
-m = JSON.stringify(m);
-
-tester.send(['',m]);
+body = JSON.stringify(body);
+indb(id,body);
 
 // PUT event
-component = "event";
 id = 1;
 op = "put";
 args = {"name":"cenica", "datetime":"9mayo15:30", "description": "cena con amigos", "organizer": "paco44", "assistants":""};
 args = JSON.stringify(args);
 body = {"op":op, "arg": args};
-m = {"component":component, "id":id, "body":body};
-m = JSON.stringify(m);
-
-tester.send([' ',m]);
+body = JSON.stringify(body);
+indb(id,body);
 
 // GET existing user
-component = "user";
 id = "paco44";
-op = "get";
-body = {"op":op};
-m = {"component":component, "id":id, "body":body};
-m = JSON.stringify(m);
-
-tester.send([' ',m]);
+outdb(id);
 
 // GET existing event
-component = "event";
 id = 1;
-op = "get";
-body = {"op":op};
-m = {"component":component, "id":id, "body":body};
-m = JSON.stringify(m);
-
-tester.send([' ',m]);
+outdb(id);
