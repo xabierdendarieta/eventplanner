@@ -27,7 +27,6 @@ let bdSocket = zmq.socket('dealer');
 let host = 'tcp://' + ip + ':' + puerto;
 bdSocket.identity = "bd";
 bdSocket.connect(host);
-console.log("Listening on... "+host);
 
 // Listen 
 bdSocket.on("message", async (_, message) => {
@@ -59,14 +58,13 @@ bdSocket.on("message", async (_, message) => {
 
 	if (op == "get") {
 		let res = await take(id);
-		//responder(res);
+		responder(res);
 		return;
 	} else if (op == "put") {
 		let args = body["arg"];
 		let res = await insert(id,args);
-//         console.log("hecho: ",res);
-// 		responder(res);
-// 		return;
+		responder(res);
+		return;
 	} else {
 		responder("Wrong operation");
 		return;
@@ -81,13 +79,11 @@ const insert = async (id,args) => {
 	let promiss = db.put(id, args);
 	await promiss
 		.then(() => {
-            responder("Done");
-			return "Done";
+            resp = "Done";
 		}).catch((error) => {
-			console.log("Put Error: " + error);
-            responder("Failed");
-			return "Failed";
+            resp = "Failed";
 		});
+        return resp;
 } 
 
 // Get values from DB
@@ -98,21 +94,15 @@ const take = async (id) => {
 	await promiss
 		.then((value) => {
 			resp = value;
-            responder(value);
-        	return value;
         }).catch((error) => {
-        	console.log("Get Error: " + error);
-            responder("Failed");
-        	return "Failed";
+            resp = "Failed";
         });
+        return resp;
 }
 
 // Send info to API
 function responder(res) {
-    let m = {"res":res};
-    m = JSON.stringify(m);
-    console.log(m);
-    bdSocket.send([' ',m]);
+    bdSocket.send([' ',res]);
     return;
 }
 
@@ -121,3 +111,6 @@ function responder(res) {
 
 // Check for corrupt data in event args
 // function checkEvent()
+
+exports.insert = insert;
+exports.take = take;
