@@ -7,6 +7,6 @@ var EventController = require('../controllers/evetnController');
 var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
 // Creamos una ruta para los métodos que tenemos en nuestros controladores
-api.get('/event/:name', md_auth.ensureAuth, EventController.getEvent);
+api.get('/event/:name', res, EventController.getEvent);
 // Exportamos la configuración
 module.exports = api;
