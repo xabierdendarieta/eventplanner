@@ -3,6 +3,7 @@
 // Libraries
 let level = require('level');
 let zmq = require('zmq');
+const crypto = require("crypto");
 
 // Create DB
 let db = level('./eventplanner');
@@ -36,15 +37,28 @@ bdSocket.on("message", async (_, message) => {
 	// Check if user or event
 	let component = mensaje["component"];
 	let id = mensaje["id"];
-    let body;
-	if (component == "user") { 
-		body = mensaje["body"];
-		// let ok = checkUser(body);
-	} else if (component == "event") {
-		body = mensaje["body"];
-		// let ok = checkEvent(body);
+    let body = mensaje["body"];
+    // check if body has proper structure (no injection)
+    let op = body["op"];
+    
+    if (op == "get") {
+		let res = await take(id);
+		responder(res);
+		return;
+	} else if (op == "put") {
+		let args = body["arg"];
+        if (component == "event") {
+            id = idEvent();
+        }
+		let res = await insert(id,args,component);
+        if (component == "event") {
+            res = id;
+        }
+        console.log(res);
+		responder(res);
+		return;
 	} else {
-		responder("No user, no event");
+		responder("Wrong operation");
 		return;
 	}
 
@@ -54,33 +68,25 @@ bdSocket.on("message", async (_, message) => {
 	// } 
 
 	// Check type of operation
-	let op = body["op"];
+	
 
-	if (op == "get") {
-		let res = await take(id);
-		responder(res);
-		return;
-	} else if (op == "put") {
-		let args = body["arg"];
-		let res = await insert(id,args);
-		responder(res);
-		return;
-	} else {
-		responder("Wrong operation");
-		return;
-	}
+	
 });
 
 
 // Put values into DB
-const insert = async (id,args) => {
+const insert = async (id,args, component) => {
 	// Introducir valores
 	let resp;
 	let promiss = db.put(id, args);
 	await promiss
 		.then(() => {
             resp = "Done";
+            if (component == "event") {
+                resp = id;
+            }
 		}).catch((error) => {
+            console.log(error);
             resp = "Failed";
 		});
         return resp;
@@ -100,6 +106,10 @@ const take = async (id) => {
         return resp;
 }
 
+// Create unique ID for new event
+function idEvent() {
+    return crypto.randomBytes(3).toString("hex");
+}
 // Send info to API
 function responder(res) {
     bdSocket.send([' ',res]);
@@ -114,3 +124,4 @@ function responder(res) {
 
 exports.insert = insert;
 exports.take = take;
+exports.idEvent = idEvent;
