@@ -21,8 +21,14 @@ const numtest = 4;
 //     }
 // }
 
-function testput(res) {
+function testputuser(res) {
     assert.equal(res,"Done", "Test failed");
+    return;
+}
+
+function testputevent(res,cont) {
+    assert.ok(typeof res === "string", "Test failed");
+    assert.ok(res.length == 6, "Wrong generated ID");
     return;
 }
 
@@ -31,10 +37,25 @@ function testget(res,cont) {
     return;
 }
 
-const indb = async(id,body) => {
-    let sol = database.insert(id,body);
+const indbuser = async(id,body) => {
+    let sol = database.insert(id,body,"user");
     await sol.then((value) => {
-        testput(value);
+        testputuser(value);
+        return;
+    }).catch((error) => {
+        console.log(error);
+        return;
+    });
+    cont = cont + 1;
+    if (cont == numtest){
+        process.exit(0);
+    }
+};
+
+const indbevent = async(id,body) => {
+    let sol = database.insert(id,body,"event");
+    await sol.then((value) => {
+        testputevent(value);
         return;
     }).catch((error) => {
         console.log(error);
@@ -62,7 +83,6 @@ const outdb = async(id) => {
 };
 
 // Output messages
-let component;
 let id;
 let op;
 let args;
@@ -76,21 +96,22 @@ args = {"password": "micasa"};
 args = JSON.stringify(args);
 body = {"op":op, "arg": args};
 body = JSON.stringify(body);
-indb(id,body);
+indbuser(id,body);
 
 // PUT event
-id = 1;
+id = database.idEvent();
 op = "put";
 args = {"name":"cenica", "datetime":"9mayo15:30", "description": "cena con amigos", "organizer": "paco44", "assistants":""};
 args = JSON.stringify(args);
 body = {"op":op, "arg": args};
 body = JSON.stringify(body);
-indb(id,body);
+indbevent(id,body);
+let saveid = id;
 
 // GET existing user
 id = "paco44";
 outdb(id);
 
 // GET existing event
-id = 1;
+id = saveid;
 outdb(id);
