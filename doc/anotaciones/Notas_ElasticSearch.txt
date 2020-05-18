@@ -1,0 +1,8 @@
+Cabe destacar que, de haberse tratado de un proyecto con mayores recursos y disponibilidad de tiempo, la Base de Datos podría haberse realizado con ElasticSearch en vez de LevelDB, por las siguientes razones:
+•	Permite escalabilidad horizontal, lo cual supone un bajo coste en caso de necesitar escalar nuestro sistema.
+•	Al ser una base de datos orientada a ficheros JSON, se amolda perfectamente a nuestras necesidades.
+•	Incluye un sistema de master-workers distribuido en un clúster que nos facilita una alta disponibilidad con alta tolerancia a fallos.
+•	También proporciona un sistema de replicación automático, por lo que la herramienta por sí sola ya contiene todos los aspectos que necesitamos de una base de datos.
+
+
+-> Utilizar esta información para un ADR sobre la BD.
