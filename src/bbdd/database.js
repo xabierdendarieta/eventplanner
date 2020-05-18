@@ -67,10 +67,6 @@ bdSocket.on("message", async (_, message) => {
 	// 	return;
 	// } 
 
-	// Check type of operation
-	
-
-	
 });
 
 
