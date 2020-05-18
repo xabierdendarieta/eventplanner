@@ -54,7 +54,6 @@ bdSocket.on("message", async (_, message) => {
         if (component == "event") {
             res = id;
         }
-        console.log(res);
 		responder(res);
 		return;
 	} else {
@@ -82,7 +81,6 @@ const insert = async (id,args, component) => {
                 resp = id;
             }
 		}).catch((error) => {
-            console.log(error);
             resp = "Failed";
 		});
         return resp;
