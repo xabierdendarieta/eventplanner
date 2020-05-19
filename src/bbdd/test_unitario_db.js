@@ -21,6 +21,7 @@ const numtest = 4;
 //     }
 // }
 
+// Test introducir nuevo usuario
 function testputuser(res) {
     assert.equal(res,"Done", "Test failed");
     return;
