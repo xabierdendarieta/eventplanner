@@ -7,14 +7,22 @@ var ent = "auth";
 
 function signin(req, res){
 
-    var m = component.getStringifyMessage(ent, res.name, res.password, "post");
+    //var m = component.getStringifyMessage(ent, res.name, res.password, "post");
 
-    return index.socket.send([' ',m]);
+    return true; //index.socket.send([' ',m]);
 
 }
 
 function login(req, res){
-    var m = component.getStringifyMessage(ent, res.name, res.password, "post");
+    // Obtener los usuarios y comprobar la contraseña aquí
+    var pass = res.password;
 
-    return index.socket.send([' ',m]);
+    var m = component.getStringifyMessage(ent, res.name, "", "get");
+
+    var result = index.socket.send([' ',m]);
+    if(typeof result === "string" ){
+        return true;
+    }
+
+    return false;
 }

@@ -4,7 +4,18 @@ var Event = require('../models/event');
 var component = require('./component.js');
 var ent = "event";
 
-// Conseguir datos de un usuario
+function putEvent(id, name, description, datetime, organizer)
+{
+
+    var m = component.getEventDataInArgs(name, description, datetime, organizer);
+    var m2 = component.getStringifyMessage(ent, id, args, "put");
+    var data = index.socket.send([' ',m]);
+    var mensaje = JSON.parse(data.toString());
+
+    return mensaje['id'];
+}
+
+// Conseguir datos de un evento
 function getEvent(req, res){
     var eventId = req.params.id;
     var m =  component.getStringifyMessage(ent, name, "", "get");
