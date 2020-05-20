@@ -1,0 +1,42 @@
+Anotaciones clase 20 de mayo
+
+-> Entrega final de la memoria del proyecto.
+	-> Fecha: 1 de junio.
+-> Realizar última demo de lo que haya hecho en el momento.
+	-> Fecha: 3 de junio.
+
+-> Examen final
+	-> Fecha: 10 de junio a 16h. (ya estaba planificado)
+	-> MiAulario:
+		-> Aitor: tipo tests y desarrollo corto.
+			-> Tiempo más ajustado para no copiar.
+			-> Integración continua, Docker, de lo visto... 
+			-> Sobre el proyecto para saber que hemos trabajado todos. 
+			-> De memoria nada.
+
+			-> Dará instrucciones más precisas.
+
+
+-> PLAN DE SISTEMAS
+	-> En base al documento de requisitos de despliegue.
+	-> Llevarlo a bajo nivel.
+	-> Como si fuésemos el líder de arquitectura de una empresa.
+	-> Alta disponibilidad y escalable (conforme lleguen más usuarios).
+	-> Hardware y arquitectura del hardware que necesitamos:
+		-> Comparativa una cloud privada (CPD) en la oficina vs. Cloud.
+		-> Qué componentes necesitamos.
+		-> Un diagrama de cómo quedaría.
+
+		-> Para cloud: AWS, crear la topología, etc. (lo mismo que antes)
+			-> Cloud craft: para diagrama para visualizar la infraestructura. (Te dice el precio de lo que cuesta mensualmente].
+
+		-> Ventajas y desventajas de ambos.
+		-> Decisión tomada para nuestra aplicación y su justificación.
+
+		-> Tanto en documento mejor explicado con referencia a ADR como ADR tal cual.
+
+		-> Sin olvidar la integración continua, igual Jenkins tiene que estar en un contenedor a parte o lo que sea: informarmos.
+
+		(Si se hace en Cloud primero, luego se puede trasladar a físico de forma más guiada y rápida).
+
+		-> Interesante: a partir de qué fecha se amortizaría el CPD en comparación con AWS.
