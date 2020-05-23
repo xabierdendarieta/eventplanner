@@ -2,3 +2,11 @@ textarea {
 	resize: vertical;
 	overflow: auto;
 }
+
+.hoverable:hover {
+	background-color: #eee;
+}
+
+#nav-username {
+	text-transform: capitalize;
+}

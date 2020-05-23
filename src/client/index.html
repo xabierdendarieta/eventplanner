@@ -40,11 +40,8 @@
 
 				<ul class="nav navbar-nav navbar-right" id="navbar-state-user" style="display: none">
 					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">User Name
-						<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> <span id="nav-username">User Name</span><span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li id="navbar-user"><a onclick="loadUser()"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
-							<!-- <br> -->
 							<li id="navbar-logout"><a onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 						</ul>
 					</li>
@@ -88,7 +85,7 @@
 			<div class="col-sm-offset-2 col-sm-10">
 				<h1>New Event</h1>
 			</div>
-			<form class="form-horizontal" action="">
+			<div class="form-horizontal">
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="eventname">Event Name:</label>
 					<div class="col-sm-10">
@@ -116,82 +113,29 @@
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-primary">Submit</button>
+						<button id="event-button" class="btn btn-primary" onclick="add_event(this, '${user}')">Submit</button>
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 
 		<div class="row" style="display: none" id="event">
 			<div class="col-sm-6">
-				<h2>Event Name<br><small>YYYY/MM/DD hh:mm</small></h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<h2>${event_name}<br><small>${datetime}</small></h2>
+				<p>${description}</p>
 			</div>
 
 			<div class="col-sm-6">
 				<table class="table table-striped">
 					<thead>
-						<th class="col-sm-11 col-xs-11">Assistings</th>
+						<th class="col-sm-11 col-xs-11">Assistants</th>
 						<th class="col-sm-1 col-xs-1"></th>
 					</thead>
 					<tbody>
-						<tr>
-							<td>User 1</td>
+						<tr style="display: none" id="assistant-list-row-template">
+							<td class="hoverable">${assistant}</td>
 							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 2</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 3</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 4</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 5</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 6</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 7</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 8</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>User 9</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+								<button class="btn btn-danger" onclick="remove_assistant('${assistant}', '${event_id}')" style="display: none"><i class="glyphicon glyphicon-remove"></i></button>
 							</td>
 						</tr>
 					</tbody>
@@ -209,76 +153,12 @@
 						<th class="col-sm-1 col-xs-1"></th>
 					</thead>
 					<tbody>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 1</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
+						<tr style="display: none" id="event-list-row-template">
+							<td class="hoverable" onclick="loadEvent('${event_id}')">${event_name}</td>
+							<td>${datetime}</td>
+							<td>${assistant_cnt}</td>
 							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 2</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 3</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 4</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 5</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 6</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 7</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 8</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td><a onclick="loadEvent(this)">Event 9</a></td>
-							<td>YYYY/MM/DD hh:mm</td>
-							<td>42</td>
-							<td>
-								<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+								<button class="btn btn-danger" onclick="remove_event('${event_id}')"><i class="glyphicon glyphicon-remove"></i></button>
 							</td>
 						</tr>
 					</tbody>
@@ -286,50 +166,11 @@
 			</div>
 		</div>
 
-		<div class="row" style="display: none" id="user">
-			<div class="col-sm-offset-2 col-sm-8">
-				<h1>User info</h1>
-			</div>
-			<form class="form-horizontal" action="">
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-8">
-						<div class="input-group">
-							<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-							<input id="email" type="text" class="form-control"placeholder="Email">
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-8">
-						<div class="input-group">
-							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-							<input id="username" type="text" class="form-control" placeholder="Name">
-						</div>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-8">
-						<button type="submit" class="btn btn-primary" onclick="">Change</button>
-						<button type="submit" class="btn btn-default" onclick="">Discard</button>
-					</div>
-				</div>
-			</form>
-		</div>
-
 		<div class="row" style="display: none" id="login">
 			<div class="col-sm-offset-2 col-sm-8">
 				<h1>Sign Up / Login</h1>
 			</div>
-			<form class="form-horizontal" action="">
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-8">
-						<div class="input-group">
-							<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-							<input id="email" type="text" class="form-control"placeholder="Email">
-						</div>
-					</div>
-				</div>
+			<div class="form-horizontal">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-8">
 						<div class="input-group">
@@ -341,10 +182,10 @@
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-8">
-						<button type="submit" class="btn btn-primary" onclick="login()">Submit</button>
+						<button id="login-button" class="btn btn-primary" onclick="login()">Submit</button>
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 

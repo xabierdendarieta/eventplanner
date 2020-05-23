@@ -1,0 +1,27 @@
+{
+	"users": [
+		{"name": "bob", "password": "0001"},
+		{"name": "ana", "password": "0002"},
+		{"name": "pepe", "password": "0003"},
+		{"name": "juan", "password": "0004"},
+		{"name": "mike", "password": "0005"}
+	],
+	"list": [
+		{
+			"id": "event_test1",
+			"name": "Evento de Prueba",
+			"description": "Pues este sería el evento que voy a usar para probar que voy por buen camino, nada más",
+			"datetime": "2020-05-30 18:30:00 GMT",
+			"organizer": "pepe",
+			"assistants": ["bob", "ana", "pepe"]
+		},
+		{
+			"id": "event_test2",
+			"name": "Otro Evento de Prueba",
+			"description": "Pues este sería el evento que voy a usar para probar (aunque no tanto) que voy por buen camino, nada más",
+			"datetime": "2020-05-23 18:30:00 GMT",
+			"organizer": "pepe",
+			"assistants": ["bob", "ana", "mike", "juan"]
+		}
+	]
+}
