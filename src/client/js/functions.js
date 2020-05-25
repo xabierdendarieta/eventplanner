@@ -1,40 +1,50 @@
-appName = '/eventplanner/';
-
-ajax = {
-	get: (url, func) => {
-		$.ajax({
-	        url: url,
-	        crossDomain: true,
-	        dataType: 'json',
-	        success: func,
-	        type: 'GET'
-	    });
-	},
-	post: (url, func, msg) => {
-		$.ajax({
-	        url: url,
-	        crossDomain: true,
-	        data: JSON.stringify(msg),
-	        dataType: 'json',
-	        success: func,
-	        type: 'POST'
-	    });
-	}
-}
-
-// ajax.get("dummy.json", (res) => {console.log(res)})
-
 /* Router */
 $(document).ready(route);
 
 function route() {
+	appName = '/eventplanner/';
+	user = undefined;
+	
+	user = getUser();
+	if (user !== undefined && user !== "") {
+		$.get("dummy.json", (res) => {
+			// TODO
+			if (!isUserIntoList(user, res.users)) {
+				user = undefined;
+
+				var location = window.location.hash;
+				var tokens = location.split("/");
+
+				while (tokens.length > 2) {
+					tokens.splice(2, 1);
+				}
+
+				tokens.splice(2, 1);
+
+				window.location.hash = tokens.join("/");
+			}
+
+			_route();
+		});
+	} else {
+		_route();
+	}
+}
+
+function _route() {
+	// Contents from templates
+	content_node = $(".content")[0];
+	content_home = $(".home")[0];
+	content_new = $(".new")[0];
+	content_event = $(".event")[0];
+	content_list = $(".list")[0];
+	content_login = $(".login")[0];
+	table_row_event = $(".list tbody tr")[0].cloneNode(true);
+	table_row_assistant = $(".event tbody tr")[0].cloneNode(true);
+	$(".templates").remove();
+
 	var location = window.location.hash;
-	console.log(location);
-
 	var tokens = location.split("/");
-	console.log(tokens);
-
-	// TODO: check user, check event
 
 	if (tokens[1] == undefined) {
 		loadHome();
@@ -54,22 +64,25 @@ function route() {
 	}
 }
 
+function load(target) {
+	while (content_node.childElementCount > 0) {
+		content_node.removeChild(content_node.lastElementChild);
+	}
+	content_node.appendChild(target.cloneNode(true));
+}
+
 function loadHome() {
 	if (getUser() == undefined) {
-		$("#navbar-state-user").hide();
-		$("#navbar-state-login").show();
+		$(".navbar-state-user").addClass("hide");
+		$(".navbar-state-login").removeClass("hide");
 	} else {
-		$("#navbar-state-user").show();
-		$("#navbar-state-login").hide();
+		$(".navbar-state-user").removeClass("hide");
+		$(".navbar-state-login").addClass("hide");
 	}
 
-	click($("#navbar-home"));
+	click($(".navbar-home"));
 
-	$("#home").show();
-	$("#new").hide();
-	$("#event").hide();
-	$("#list").hide();
-	$("#login").hide();
+	load(content_home);
 
 	changeLocation("home");
 }
@@ -80,42 +93,38 @@ function loadNew() {
 		loadHome();
 		return;
 	} else {
-		$("#navbar-state-user").show();
-		$("#navbar-state-login").hide();
+		$(".navbar-state-user").removeClass("hide");
+		$(".navbar-state-login").addClass("hide");
 	}
 
-	click($("#navbar-new"));
+	click($(".navbar-new"));
 
-	$("#home").hide();
-	$("#new").show();
-	$("#event").hide();
-	$("#list").hide();
-	$("#login").hide();
+	load(content_new);
 
-	$("#event-button")[0].parentElement.innerHTML = $("#event-button")[0]
-		.parentElement.innerHTML.replace("${user}", user)
+	$(".event-button")[0].parentElement.innerHTML = $(".event-button")[0]
+		.parentElement.innerHTML.replace("${user}", user);
 
 	changeLocation("new");
 }
 
-function loadEvent(src) {
-	var id = getEvent(src);
-	if (id == undefined) {
-		return;
-	}
-
+function loadEvent(eventid) {
 	var user = getUser();
 	if (user == undefined) {
 		loadHome();
 		return;
 	} else {
-		$("#navbar-state-user").show();
-		$("#navbar-state-login").hide();
+		$(".navbar-state-user").removeClass("hide");
+		$(".navbar-state-login").addClass("hide");
 	}
 
-	unclick();
+	var id = getEvent(eventid);
+	if (id == undefined) {
+		loadHome();
+		return;
+	}
 
-	ajax.get("dummy.json", (res) => {
+	$.get("dummy.json", (res) => {
+		// TODO
 		var event;
 		for(event of res.list) {
 			if (event.id === id) {
@@ -124,54 +133,60 @@ function loadEvent(src) {
 		}
 		if (event.id !== id) {
 			loadHome();
+			return;
 		}
 
-		$("#home").hide();
-		$("#new").hide();
-		$("#event").show();
-		$("#list").hide();
-		$("#login").hide();
+		unclick();
+		
+		load(content_event);
 
-		$("#event")[0].innerHTML = $("#event")[0].innerHTML
-			.replace("${event_id}", event.id)
+		$(".event")[0].innerHTML = $(".event")[0].innerHTML
+			// .replace("${event_id}", event.id)
 			.replace("${event_name}", event.name)
 			.replace("${datetime}", makeDatePretty(event.datetime))
 			.replace("${description}", event.description);
 
-		var parent = $("#assistant-list-row-template")[0].parentElement;
-		var template = $("#assistant-list-row-template")[0];
 
-		while (parent.childElementCount > 1) {
-			parent.removeChild(parent.children[1]);
+		table_assistants = $(".event tbody")[0];
+		table_row_assistant.innerHTML = table_row_assistant.innerHTML
+			.replace("${event_id}", event.id);
+
+		while (table_assistants.childElementCount > 0) {
+			table_assistants.removeChild(table_assistants.lastElementChild);
 		}
 
+		sortAssistants(event.assistants);
+
 		var user_assists = false;
-		for(assistant of event.assistants) {
-			var row = template.cloneNode(true);
-			row.id = "";
-			row.style = "";
+		for(var assistant of event.assistants) {
+			var row = table_row_assistant.cloneNode(true);
 			row.innerHTML = row.innerHTML
+				.replace("${assistant}", assistant)
 				.replace("${assistant}", assistant);
 			if (assistant === user || user === event.organizer) {
-				row.lastElementChild.lastElementChild.style = "";
+				row.innerHTML = row.innerHTML
+					.replace("disabled", "hoverable clickable");
+				row.lastElementChild.lastElementChild.classList.remove("hide");
+			} else {
+				row.lastElementChild.onclick = undefined;
 			}
 			if (assistant === user) {
 				user_assists = true;
 			}
-			parent.appendChild(row);
+			table_assistants.appendChild(row);
 		}
 
 		if (!user_assists) {
-			var row = template.cloneNode(true);
-			row.id = "";
-			row.style = ""
+			var row = table_row_assistant.cloneNode(true);
 			row.innerHTML = row.innerHTML
 				.replace("${assistant}", "")
-				.replace("danger", "success")
-				.replace("glyphicon-remove", "glyphicon-plus");
-			row.lastElementChild.lastElementChild.style = "";
-			row.lastElementChild.lastElementChild.onclick = add_assistant(user);
-			parent.appendChild(row);
+				.replace("hoverable", "")
+				.replace("glyphicon-remove", "glyphicon-plus")
+				.replace("disabled", "hoverable clickable")
+				.replace("remove", "add")
+				.replace("${assistant}", user);
+			row.lastElementChild.lastElementChild.classList.remove("hide");
+			table_assistants.appendChild(row);
 		}
 	});
 
@@ -185,36 +200,33 @@ function loadList() {
 		loadHome();
 		return;
 	} else {
-		$("#navbar-state-user").show();
-		$("#navbar-state-login").hide();
+		$(".navbar-state-user").removeClass("hide");
+		$(".navbar-state-login").addClass("hide");
 	}
 
-	click($("#navbar-list"));
+	$.get("dummy.json", (res) => {
+		// TODO
+		click($(".navbar-list"));
 
-	ajax.get("dummy.json", (res) => {
-		$("#home").hide();
-		$("#new").hide();
-		$("#event").hide();
-		$("#list").show();
-		$("#login").hide();
+		load(content_list);
 
-		parent = $("#event-list-row-template")[0].parentElement;
-		var template = $("#event-list-row-template")[0];
+		table_events = $(".list tbody")[0];
 
-		while (parent.childElementCount > 1) {
-			parent.removeChild(parent.children[1]);
+		while (table_events.childElementCount > 0) {
+			table_events.removeChild(table_events.lastElementChild);
 		}
 
-		for(event of res.list) {
-			var row = template.cloneNode(true);
-			row.id = "";
-			row.style = "";
+		sortEvents(res.list);
+
+		for(var event of res.list) {
+			var row = table_row_event.cloneNode(true);
 			row.innerHTML = row.innerHTML
+				.replace("${event_id}", event.id)
 				.replace("${event_id}", event.id)
 				.replace("${event_name}", event.name)
 				.replace("${datetime}", makeDatePretty(event.datetime))
 				.replace("${assistant_cnt}", event.assistants.length);
-			parent.appendChild(row);
+			table_events.appendChild(row);
 		}
 	});
 
@@ -223,25 +235,21 @@ function loadList() {
 
 function loadLogin() {
 	if (getUser() == undefined) {
-		$("#navbar-state-user").hide();
-		$("#navbar-state-login").show();
+		$(".navbar-state-user").addClass("hide");
+		$(".navbar-state-login").removeClass("hide");
 	} else {
 		loadHome();
 		return;
 	}
 
-	click($("#navbar-login"));
+	click($(".navbar-login"));
 
-	$("#home").hide();
-	$("#new").hide();
-	$("#event").hide();
-	$("#list").hide();
-	$("#login").show();
+	load(content_login);
 
 	changeLocation("login");
 }
 
-function login() {
+function login() { // And register
 	var location = window.location.hash;
 	var tokens = location.split("/");
 
@@ -250,21 +258,40 @@ function login() {
 		return;
 	}
 
-	ajax.get("dummy.json", (res) => {
-		if (isUserIntoList(res.users, username)) {
+	$.get("dummy.json", (res) => {
+		// TODO
+		if (isUserIntoList(username, res.users)) {
 			tokens[2] = username;
+			user = username;
 
 			$("#username")[0].value = "";
 			$(".has-error").removeClass("has-error");
 			window.location.hash = tokens.join("/");
 			loadHome();
 		} else {
-			$("#username")[0].parentElement.className += " has-error";
+			$("#username")[0].parentElement.classList.add("has-error");
+
+			// Register new user
+			if (confirm("Do you want to register the user name " + username + "?")) {
+				$.post("dummy.json", {name: username}, (res) => {
+					// TODO
+					
+					tokens[2] = username;
+					user = username;
+
+					$("#username")[0].value = "";
+					$(".has-error").removeClass("has-error");
+					window.location.hash = tokens.join("/");
+					loadHome();
+				});
+			}
 		}
 	});
 }
 
 function logout() {
+	user = undefined;
+
 	var location = window.location.hash;
 	var tokens = location.split("/");
 
@@ -279,113 +306,59 @@ function logout() {
 	loadHome();
 }
 
-/* Other functions */
-function click(src) {
-	unclick();
-	src.addClass("active");
+function removeEvent(event) {
+	console.log("removeEvent(" + event + ")");
+	$.post("dummy.json", {eventid: event}, (res) => {
+		console.log(res);
+
+		// TODO
+	});
 }
 
-function unclick() {
-	$(".active").removeClass("active");
+function addAssistant(user, event) {
+	console.log("addAssistant(" + user + ", " + event + ")");
+	$.post("dummy.json", {username: user, eventid: event}, (res) => {
+		console.log(res);
+
+		// TODO
+	});
 }
 
-function changeLocation(destiny) {
-	var location = window.location.hash;
-	var tokens = location.split("/");
+function removeAssistant(user, event) {
+	console.log("removeAssistant(" + user + ", " + event + ")");
+	$.post("dummy.json", {username: user, eventid: event}, (res) => {
+		console.log(res);
 
-	tokens[1] = destiny;
-
-	if (destiny === "event") {
-		while (tokens.length > 4) {
-			tokens.splice(4, 1);
-		}
-	} else if (tokens[2] === "") {
-		while (tokens.length > 2) {
-			tokens.splice(2, 1);
-		}
-	} else {
-		while (tokens.length > 3) {
-			tokens.splice(3, 1);
-		}
-	}
-
-	window.location.hash = tokens.join("/")
+		// TODO
+	});
 }
 
-function getUser() {
-	var location = window.location.hash;
-	var tokens = location.split("/");
 
-	if (tokens[2] === "") {
-		return undefined;
-	}
-
-	// TODO: check user
-
-	$("#nav-username")[0].textContent = tokens[2];
-
-	return tokens[2];
-}
-
-function isUserIntoList(userlist, username) {
-	for(user of userlist) {
-		if (user.name === username) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function getEvent(event) {
-	if (event === undefined || event === "") {
-		var location = window.location.hash;
-		var tokens = location.split("/");
-
-		if (tokens.length > 3) {
-			event = tokens[3];
-		} else {
-			return undefined;
-		}
-	}
-
-	// TODO: check event
-
-	return event;
-}
-
-function makeDatePretty(datetime) {
-	return datetime;
-}
-
-function remove_event() {
-	// TODO: complete
-}
-
-function add_assistant(user, event) {
-	// TODO: complete
-}
-
-function remove_assistant(user, event) {
-	// TODO: complete
-}
-
-function add_event(src, user) {
+/* POST functions */
+function addEvent(src, user) {
 	if ($("#eventname")[0].value === "") {
-		$("#eventname")[0].parentElement.className += " has-error";
+		$("#eventname")[0].parentElement.classList.add("has-error");
 		return;
+	} else {
+		$("#eventname")[0].parentElement.classList.remove("has-error");
 	}
 	if ($("#date")[0].value === "") {
-		$("#date")[0].parentElement.className += " has-error";
+		$("#date")[0].parentElement.classList.add("has-error");
 		return;
+	} else {
+		$("#date")[0].parentElement.classList.remove("has-error");
 	}
 	if ($("#time")[0].value === "") {
-		$("#time")[0].parentElement.className += " has-error";
+		$("#time")[0].parentElement.classList.add("has-error");
 		return;
+	} else {
+		$("#time")[0].parentElement.classList.remove("has-error");
 	}
 	if ($("#description")[0].value === "") {
-		$("#description")[0].parentElement.className += " has-error";
+		$("#description")[0].parentElement.classList.add("has-error");
 		return;
+	} else {
+		$("#description")[0].parentElement.classList.remove("has-error");
 	}
 
 	event = {
@@ -403,4 +376,111 @@ function add_event(src, user) {
 	$("#description")[0].value = "";
 
 	console.log(event);
+	$.post("dummy.json", event, (res) => {
+		console.log(res);
+
+		// TODO
+
+		loadList();
+	});
+}
+
+
+/* Other functions */
+function click(src) {
+	unclick();
+	src.addClass("active");
+}
+
+function unclick() {
+	$(".active").removeClass("active");
+}
+
+function makeDatePretty(datetime) {
+	return datetime;
+}
+
+function changeLocation(destiny) {
+	var location = window.location.hash;
+	var tokens = location.split("/");
+
+	tokens[1] = destiny;
+
+	if (destiny === "event") {
+		while (tokens.length > 4) {
+			tokens.splice(4, 1);
+		}
+		tokens[2] = user;
+	} else if (tokens[2] === "") {
+		while (tokens.length > 2) {
+			tokens.splice(2, 1);
+		}
+	} else {
+		while (tokens.length > 3) {
+			tokens.splice(3, 1);
+		}
+		tokens[2] = user;
+	}
+
+	window.location.hash = tokens.join("/")
+}
+
+function getUser() {
+	if (user === undefined || user === "") {
+		var location = window.location.hash;
+		var token = location.split("/")[2];
+
+		if (token === "") {
+			return undefined;
+		}
+
+		user = token;
+	} else {
+		var location = window.location.hash;
+		var tokens = location.split("/");
+		tokens[2] = user;
+		window.location.hash = tokens.join("/");
+	}
+
+	$(".nav-username")[0].textContent = user;
+
+	return user;
+}
+
+function isUserIntoList(username, userlist) {
+	for(var user of userlist) {
+		if (user.name === username) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function getEvent(eventid) {
+	if (eventid === undefined || eventid === "") {
+		var location = window.location.hash;
+		var tokens = location.split("/");
+
+		if (tokens.length < 4 || tokens[3] === "") {
+			return undefined;
+		}
+
+		eventid = tokens[3];
+	} else {
+		var location = window.location.hash;
+		var tokens = location.split("/");
+		tokens[3] = eventid;
+		window.location.hash = tokens.join("/");
+	}
+
+	return eventid;
+}
+
+function sortAssistants(list) {
+	list.sort();
+}
+
+function sortEvents(list) {
+	list.sort((a, b) => a.datetime.localeCompare(b.datetime));
 }

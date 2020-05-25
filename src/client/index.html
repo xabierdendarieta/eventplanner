@@ -24,25 +24,27 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" onclick="loadHome()">EventPlanner</a>
+				<span class="navbar-brand">EventPlanner</span>
 			</div>
 
 			<div class="collapse navbar-collapse" id="navbar">
 				<ul class="nav navbar-nav">
-					<li class="active" id="navbar-home"><a onclick="loadHome()"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-					<li id="navbar-new"><a onclick="loadNew()"><span class="glyphicon glyphicon-plus"></span> New Event</a></li>
-					<li id="navbar-list"><a onclick="loadList()"><span class="glyphicon glyphicon-list"></span> My Events</a></li>
+					<li class="active navbar-home"><a onclick="loadHome()"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-state-user hide">
+					<li class="navbar-list"><a onclick="loadList()"><span class="glyphicon glyphicon-list"></span> My Events</a></li>
+					<li class="navbar-new"><a onclick="loadNew()"><span class="glyphicon glyphicon-plus"></span> New Event</a></li>
 				</ul>
 
-				<ul class="nav navbar-nav navbar-right" id="navbar-state-login" style="display: none">
-					<li id="navbar-login"><a onclick="loadLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				<ul class="nav navbar-nav navbar-right navbar-state-login hide">
+					<li class="navbar-login"><a onclick="loadLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 				</ul>
 
-				<ul class="nav navbar-nav navbar-right" id="navbar-state-user" style="display: none">
+				<ul class="nav navbar-nav navbar-right navbar-state-user hide">
 					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> <span id="nav-username">User Name</span><span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> <span class="nav-username">User Name</span><span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li id="navbar-logout"><a onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+							<li class="navbar-logout"><a onclick="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -50,8 +52,10 @@
 		</div>
 	</nav>
 
-	<div class="container content" style="margin-top:70px">
-		<div class="row" style="display: none" id="home">
+	<div class="container content"></div>
+
+	<div class="container templates">
+		<div class="row home">
 			<div class="jumbotron col-sm-12">
 				<h1>EventPlanner</h1>
 				<p>The solution you need to make events</p>
@@ -81,7 +85,7 @@
 			</div>
 		</div>
 
-		<div class="row" style="display: none" id="new">
+		<div class="row new">
 			<div class="col-sm-offset-2 col-sm-10">
 				<h1>New Event</h1>
 			</div>
@@ -113,13 +117,13 @@
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button id="event-button" class="btn btn-primary" onclick="add_event(this, '${user}')">Submit</button>
+						<button class="btn btn-primary event-button" onclick="addEvent(this, '${user}')">Submit</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row" style="display: none" id="event">
+		<div class="row event">
 			<div class="col-sm-6">
 				<h2>${event_name}<br><small>${datetime}</small></h2>
 				<p>${description}</p>
@@ -131,11 +135,11 @@
 						<th class="col-sm-11 col-xs-11">Assistants</th>
 						<th class="col-sm-1 col-xs-1"></th>
 					</thead>
-					<tbody>
-						<tr style="display: none" id="assistant-list-row-template">
-							<td class="hoverable">${assistant}</td>
-							<td>
-								<button class="btn btn-danger" onclick="remove_assistant('${assistant}', '${event_id}')" style="display: none"><i class="glyphicon glyphicon-remove"></i></button>
+					<tbody class="assistant-table">
+						<tr>
+							<td>${assistant}</td>
+							<td class="disabled text-center" onclick="removeAssistant('${assistant}', '${event_id}')">
+								<i class="glyphicon glyphicon-remove hide"></i>
 							</td>
 						</tr>
 					</tbody>
@@ -143,7 +147,7 @@
 			</div>
 		</div>
 
-		<div class="row" style="display: none" id="list">
+		<div class="row list">
 			<div class="col-sm-12">
 				<table class="table table-striped">
 					<thead>
@@ -153,12 +157,11 @@
 						<th class="col-sm-1 col-xs-1"></th>
 					</thead>
 					<tbody>
-						<tr style="display: none" id="event-list-row-template">
-							<td class="hoverable" onclick="loadEvent('${event_id}')">${event_name}</td>
+						<tr>
+							<td class="hoverable clickable" onclick="loadEvent('${event_id}')">${event_name}</td>
 							<td>${datetime}</td>
 							<td>${assistant_cnt}</td>
-							<td>
-								<button class="btn btn-danger" onclick="remove_event('${event_id}')"><i class="glyphicon glyphicon-remove"></i></button>
+							<td class="hoverable clickable text-center" onclick="removeEvent('${event_id}')"><i class="glyphicon glyphicon-remove"></i>
 							</td>
 						</tr>
 					</tbody>
@@ -166,9 +169,9 @@
 			</div>
 		</div>
 
-		<div class="row" style="display: none" id="login">
+		<div class="row login">
 			<div class="col-sm-offset-2 col-sm-8">
-				<h1>Sign Up / Login</h1>
+				<h1>Login</h1>
 			</div>
 			<div class="form-horizontal">
 				<div class="form-group">
@@ -182,24 +185,12 @@
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-8">
-						<button id="login-button" class="btn btn-primary" onclick="login()">Submit</button>
+						<button class="btn btn-primary" id="login-button" onclick="login()">Submit</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
-	<!-- <footer class="navbar navbar-inverse navbar-fixed-bottom">
-		<div class="container-fluid">
-			<div class="navbar-header center">
-				<a class="navbar-brand" href="#">EventPlanner</a>
-			</div>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#">About us</a></li>
-			</ul>
-		</div>
-	</footer> -->
 
 </body>
 </html>

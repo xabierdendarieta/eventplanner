@@ -3,10 +3,35 @@ textarea {
 	overflow: auto;
 }
 
+td .btn {
+	padding: 0px 8px;
+}
+
+a:hover {
+	cursor: pointer;
+}
+
+.content {
+	margin-top:70px;
+}
+
+.templates, .hide {
+	display: none;
+}
+
+.navbar-inverse .navbar-brand:hover {
+	color: #9d9d9d;
+	cursor: default;
+}
+
 .hoverable:hover {
 	background-color: #eee;
 }
 
-#nav-username {
+.clickable:hover {
+	cursor: pointer;
+}
+
+.nav-username {
 	text-transform: capitalize;
 }
