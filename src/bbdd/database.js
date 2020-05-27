@@ -46,14 +46,15 @@ bdSocket.on("message", async (_, message) => {
 		responder(res);
 		return;
 	} else if (op == "put") {
-		let args = body["arg"];
+        let args;
         if (component == "event") {
+            args = body["arg"];
             id = idEvent();
+        } else {
+            args = '';
         }
-		let res = await insert(id,args,component);
-        if (component == "event") {
-            res = id;
-        }
+        let res = await insert(id,args,component);
+        console.log('res');
 		responder(res);
 		return;
 	} else {

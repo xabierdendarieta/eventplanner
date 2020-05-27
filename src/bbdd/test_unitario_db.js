@@ -38,8 +38,8 @@ function testget(res,cont) {
     return;
 }
 
-const indbuser = async(id,body) => {
-    let sol = database.insert(id,body,"user");
+const indbuser = async(id) => {
+    let sol = database.insert(id,'',"user");
     await sol.then((value) => {
         testputuser(value);
         return;
@@ -53,8 +53,8 @@ const indbuser = async(id,body) => {
     }
 };
 
-const indbevent = async(id,body) => {
-    let sol = database.insert(id,body,"event");
+const indbevent = async(id,args) => {
+    let sol = database.insert(id,args,"event");
     await sol.then((value) => {
         testputevent(value);
         return;
@@ -92,21 +92,14 @@ let m;
 
 // PUT user
 id = "paco44";
-op = "put";
-args = {"password": "micasa"};
-args = JSON.stringify(args);
-body = {"op":op, "arg": args};
-body = JSON.stringify(body);
-indbuser(id,body);
+indbuser(id);
 
 // PUT event
 id = database.idEvent();
 op = "put";
 args = {"name":"cenica", "datetime":"9mayo15:30", "description": "cena con amigos", "organizer": "paco44", "assistants":""};
 args = JSON.stringify(args);
-body = {"op":op, "arg": args};
-body = JSON.stringify(body);
-indbevent(id,body);
+indbevent(id,args);
 let saveid = id;
 
 // GET existing user
