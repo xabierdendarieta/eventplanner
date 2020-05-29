@@ -1,6 +1,10 @@
 pipeline {
 
-    agent { dockerfile true }
+    agent { 
+        docker {
+            image 'node:8.10.0'
+        }
+    }
     
     tools{nodejs "node"}
     
