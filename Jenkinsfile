@@ -18,13 +18,13 @@ pipeline {
         
         stage('Install dependencies') {
             steps {
-                sh 'npm install'
+                sudo sh 'npm install'
             }
         }
         
         stage('Test') {
             steps {
-                sh 'npm test'
+                sudo sh 'npm test'
             }
         }
     }
