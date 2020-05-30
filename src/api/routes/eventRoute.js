@@ -6,8 +6,14 @@ var EventController = require('../controllers/evetnController');
 // Llamamos al router
 var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
-// Creamos una ruta para los métodos que tenemos en nuestros controladores
-api.get('/putevent/:name/:description/:datetime/:organizer', res, EventController.putEvent);
-api.get('/event/:name', res, EventController.getEvent);
+//// Creamos una ruta para los métodos que tenemos en nuestros controladores
+
+api.get('/event/:eventid', res, EventController.getEvent); // Devuelve la info del evento
+api.post('/add/event', res, EventController.addEvent); // Crea el evento
+api.post('/remove/event', res, EventController.removeEvent); // Borra el evento
+
+api.post('/add/assistant', req, EventController.addAssistant); 
+api.post('/remove/assistant', req, EventController.removeAssistant); 
+
 // Exportamos la configuración
 module.exports = api;

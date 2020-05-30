@@ -19,6 +19,7 @@ function getStringifyMessage(c, id, args, op)
 {
     var body = {"op":op, "args": args};
     body = JSON.stringify(body);
+    
     var m = {"component":c, "id":id, "body":body};
     m = JSON.stringify(m);
     return m;
