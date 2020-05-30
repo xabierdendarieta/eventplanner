@@ -26,6 +26,12 @@ pipeline {
             }
         }
         
+        stage('Directory') {
+            steps {
+                sh 'pwd'
+            }
+        }
+        
         stage('Test') {
             steps {
                 sh 'npm test'
