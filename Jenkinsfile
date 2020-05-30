@@ -6,6 +6,10 @@ pipeline {
         }
     }
     
+    environment {
+        HOME = '.'
+    }
+    
     tools{nodejs "node"}
     
     stages{
