@@ -25,8 +25,8 @@ function addEvent(id, name, description, datetime, organizer)
     return mensaje['id'];
 }
 
-function removeEvent(){
-    
+function removeEvent(req, res){
+
 }
 
 
@@ -46,7 +46,7 @@ function addAssistant(req, res){
     return result;
 }
 
-function removeAssistant(){
+function removeAssistant(req, res){
     
 }
 

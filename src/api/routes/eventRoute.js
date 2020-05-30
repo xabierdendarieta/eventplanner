@@ -8,12 +8,12 @@ var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
 //// Creamos una ruta para los métodos que tenemos en nuestros controladores
 
-api.get('/event/:eventid', res, EventController.getEvent); // Devuelve la info del evento
-api.post('/add/event', res, EventController.addEvent); // Crea el evento
-api.post('/remove/event', res, EventController.removeEvent); // Borra el evento
+api.get('/event/:eventid', EventController.getEvent); // Devuelve la info del evento
+api.post('/add/event', EventController.addEvent); // Crea el evento
+api.post('/remove/event', EventController.removeEvent); // Borra el evento
 
-api.post('/add/assistant', req, EventController.addAssistant); 
-api.post('/remove/assistant', req, EventController.removeAssistant); 
+api.post('/add/assistant', EventController.addAssistant); 
+api.post('/remove/assistant', EventController.removeAssistant); 
 
 // Exportamos la configuración
 module.exports = api;
