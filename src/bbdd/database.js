@@ -2,7 +2,7 @@
 
 // Libraries
 let level = require('level');
-let zmq = require('zmq');
+let zmq = require('zeromq');
 const crypto = require("crypto");
 
 // Create DB
