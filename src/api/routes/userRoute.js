@@ -5,7 +5,6 @@ var express = require('express');
 var UserController = require('../controllers/userController');
 // Llamamos al router
 var router = express.Router();
-//var md_auth = require('../middlewares/authenticated');
 // Creamos una ruta para los métodos que tenemos en nuestros controladores
 router.get('/user/:username', UserController.existsUser); // Busca si existe el usuario
 router.get('/list/:username', UserController.getList); // 

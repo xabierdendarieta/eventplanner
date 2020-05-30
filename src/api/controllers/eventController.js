@@ -1,44 +1,38 @@
 'use strict'
 // Cargamos los modelos para usarlos posteriormente
-var Event = require('../models/event');
 var component = require('./component.js');
 var ent = "event";
 
 
 // Conseguir datos de un evento
-function getEvent(req, res){
+module.exports.getEvent = function (req, res){
     var eventId = req.params.id;
     var m =  component.getStringifyMessage(ent, name, "", "get");
-    return index.socket.send([' ',m]);
+    //return index.socket.send([' ',m]);
     //buscar un evento por un  id
-
+    res.send("OK");
 }
 
-function addEvent(id, name, description, datetime, organizer)
+module.exports.addEvent = function (req, res)
 {
+    var id, name, description, datetime, organizer;
 
     var m = component.getEventDataInArgs(name, description, datetime, organizer);
     var m2 = component.getStringifyMessage(ent, id, args, "put");
     var data = index.socket.send([' ',m]);
     var mensaje = JSON.parse(data.toString());
 
-    return mensaje['id'];
+    //return mensaje['id'];
+    res.send("OK");
 }
 
-function removeEvent(req, res){
+module.exports.removeEvent = function (req, res){
+    res.send("OK");
 
 }
 
-
-/*function addUser(req, res){
-    var eventId = req.params.id;
-    var m =  component.getStringifyMessage(ent, name, "", "get");
-    return index.socket.send([' ',m]);
-    //buscar un evento por un  id
-}*/
-
-
-function addAssistant(req, res){
+module.exports.addAssistant = function (req, res)
+{
     var name = req.params.name;
     var m = component.getStringifyMessage(ent, res.name, "", "put");
     var result = index.socket.send([' ',m]);
@@ -46,7 +40,8 @@ function addAssistant(req, res){
     return result;
 }
 
-function removeAssistant(req, res){
+module.exports.removeAssistant = function (req, res)
+{
     
 }
 
