@@ -32,7 +32,8 @@ bdSocket.connect(host);
 // Listen 
 bdSocket.on("message", async (_, message) => {
 	// message received to JSON type
-	let mensaje = JSON.parse(message.toString());
+    let m = message.toString();
+	let mensaje = JSON.parse(m);
 
 	// Check if user or event
 	let component = mensaje["component"];
@@ -57,7 +58,7 @@ bdSocket.on("message", async (_, message) => {
 	        if (component == "event") {
 	            args = body["arg"];
 	            id = idEvent();
-	            let pkg = {"id":id,"arg":arg};
+	            let pkg = {"id":id,"arg":args};
 	            pkg = JSON.stringify(pkg);
 	            let lista = await take("lista");
 	            if (lista == 'Failed') {
@@ -67,7 +68,7 @@ bdSocket.on("message", async (_, message) => {
 	            	let r = await insert("lista",lista,"");
 	            }
 	        } else {
-	            args = '';
+	            args = id;
 	        }
 	        let res = await insert(id,args,component);
 			responder(res);
