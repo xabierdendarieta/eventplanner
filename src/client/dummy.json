@@ -1,27 +1,36 @@
 {
 	"users": [
-		{"name": "bob", "password": "0001"},
-		{"name": "ana", "password": "0002"},
-		{"name": "pepe", "password": "0003"},
-		{"name": "juan", "password": "0004"},
-		{"name": "mike", "password": "0005"}
+		{"name": "sonia"},
+		{"name": "paul"},
+		{"name": "xabier"},
+		{"name": "aitor"},
+		{"name": "javim"},
+		{"name": "javid"}
 	],
 	"list": [
 		{
-			"id": "event_test1",
+			"id": "9a4804",
 			"name": "Evento de Prueba",
+			"datetime": "2020-05-30 18:30",
 			"description": "Pues este sería el evento que voy a usar para probar que voy por buen camino, nada más",
-			"datetime": "2020-05-30 18:30:00 GMT",
-			"organizer": "pepe",
-			"assistants": ["bob", "ana", "pepe"]
+			"organizer": "xabier",
+			"assistants": ["sonia", "paul", "aitor"]
 		},
 		{
-			"id": "event_test2",
-			"name": "Otro Evento de Prueba",
-			"description": "Pues este sería el evento que voy a usar para probar (aunque no tanto) que voy por buen camino, nada más",
-			"datetime": "2020-05-23 18:30:00 GMT",
-			"organizer": "pepe",
-			"assistants": ["bob", "ana", "mike", "juan"]
+			"id": "9d0c2a",
+			"name": "Fase 2 de la desescalada",
+			"datetime": "2020-05-25 8:00",
+			"description": "NOTA: EN MADRID NO.\nSe permite salir a echar un pote y un pincho.",
+			"organizer": "aitor",
+			"assistants": ["sonia", "paul", "aitor", "javim", "javid"]
+		},
+		{
+			"id": "148cd4",
+			"name": "Concierto acústico en la plaza del pueblo",
+			"datetime": "2020-06-19 18:30",
+			"description": "Os animamos a ir a este precioso concierto de la mano del grupo local Simplex, tan animado y bonito como siempre",
+			"organizer": "xabier",
+			"assistants": ["sonia", "paul", "xabier", "javid"]
 		}
 	]
 }

@@ -144,7 +144,7 @@ function loadEvent(eventid) {
 			// .replace("${event_id}", event.id)
 			.replace("${event_name}", event.name)
 			.replace("${datetime}", makeDatePretty(event.datetime))
-			.replace("${description}", event.description);
+			.replace("${description}", event.description.replace("\n", "<br>"));
 
 
 		table_assistants = $(".event tbody")[0];
@@ -226,6 +226,15 @@ function loadList() {
 				.replace("${event_name}", event.name)
 				.replace("${datetime}", makeDatePretty(event.datetime))
 				.replace("${assistant_cnt}", event.assistants.length);
+			if (event.organizer === user) {
+				console.log(event.organizer);
+				console.log(user);
+				row.innerHTML = row.innerHTML
+					.replace("disabled", "hoverable clickable");
+				row.lastElementChild.lastElementChild.classList.remove("hide");
+			} else {
+				row.lastElementChild.onclick = undefined;
+			}
 			table_events.appendChild(row);
 		}
 	});
