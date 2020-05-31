@@ -36,37 +36,52 @@ bdSocket.on("message", async (_, message) => {
 
 	// Check if user or event
 	let component = mensaje["component"];
-	let id = mensaje["id"];
-    let body = mensaje["body"];
-    // check if body has proper structure (no injection)
-    let op = body["op"];
-    
-    if (op == "get") {
-		let res = await take(id);
-		responder(res);
-		return;
-	} else if (op == "put") {
-        let args;
-        if (component == "event") {
-            args = body["arg"];
-            id = idEvent();
-        } else {
-            args = '';
-        }
-        let res = await insert(id,args,component);
-        console.log('res');
+
+	if (component == "list") {
+		let res = await take("lista");
 		responder(res);
 		return;
 	} else {
-		responder("Wrong operation");
-		return;
+
+		let id = mensaje["id"];
+	    let body = mensaje["body"];
+	    // check if body has proper structure (no injection)
+	    let op = body["op"];
+	    
+	    if (op == "get") {
+			let res = await take(id);
+			responder(res);
+			return;
+		} else if (op == "put") {
+	        let args;
+	        if (component == "event") {
+	            args = body["arg"];
+	            id = idEvent();
+	            let pkg = {"id":id,"arg":arg};
+	            pkg = JSON.stringify(pkg);
+	            let lista = await take("lista");
+	            if (lista == 'Failed') {
+	            	let r = await insert("lista",pkg,"");
+	            } else {
+	            	lista = lista + ';' + pkg;
+	            	let r = await insert("lista",lista,"");
+	            }
+	        } else {
+	            args = '';
+	        }
+	        let res = await insert(id,args,component);
+			responder(res);
+			return;
+		} else {
+			responder("Wrong operation");
+			return;
+		}
+
+		// if (!ok) {
+		// 	responder("Security warning");
+		// 	return;
+		// } 
 	}
-
-	// if (!ok) {
-	// 	responder("Security warning");
-	// 	return;
-	// } 
-
 });
 
 
