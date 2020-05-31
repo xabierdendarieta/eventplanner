@@ -3,7 +3,6 @@ pipeline {
     agent { 
         docker {
             image 'node:8.10.0'
-            args "-v /var/lib/docker/volumes:/ep"
         }
     }
     
