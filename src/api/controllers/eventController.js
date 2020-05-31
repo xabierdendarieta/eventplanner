@@ -1,16 +1,42 @@
 'use strict'
 // Cargamos los modelos para usarlos posteriormente
-var component = require('./component.js');
+var component = require('../controllers/component');
 var ent = "event";
 
+// Cargamos el módulo de mongoose para poder conectarnos a MongoDB
+var zmq = require('zeromq');
+var ident = 'ident';
+var socket = zmq.socket("dealer");
+socket.identity = ident;
+// Creamos la variable PORT para indicar el puerto en el que va a funcionar el servidor
+var portDB = "1234";
+var ipDB = "127.0.0.1"
+var host = "tcp://" + ipDB + ":" + portDB; 
+// Connect to the server instance.
+socket.bind(host);
 
 // Conseguir datos de un evento
 module.exports.getEvent = function (req, res){
     var eventId = req.params.id;
-    var m =  component.getStringifyMessage(ent, name, "", "get");
-    //return index.socket.send([' ',m]);
-    //buscar un evento por un  id
-    res.send("OK");
+    
+    var m = component.getStringifyMessage(ent, eventId, "", "get");
+    socket.send([' ',m]);
+    console.log("Enviando... = " + m);
+
+    // Input messages
+    socket.on("message", (_,message) => { 
+        let mensaje = message.toString();
+        var m2 = mensaje.toString();
+
+        if(m2 == "Failed"){
+            res.send("ERR EVENT");
+        }else{
+
+            res.send("OK EVENT");
+        }
+
+        return;
+    });
 }
 
 module.exports.addEvent = function (req, res)
