@@ -147,7 +147,7 @@ function loadEvent(eventid) {
 			.replace("${description}", event.description.replace("\n", "<br>"));
 
 
-		table_assistants = $(".event tbody")[0];
+		var table_assistants = $(".event tbody")[0];
 		table_row_assistant.innerHTML = table_row_assistant.innerHTML
 			.replace("${event_id}", event.id);
 
@@ -173,6 +173,7 @@ function loadEvent(eventid) {
 			if (assistant === user) {
 				user_assists = true;
 			}
+			row.id = assistant;
 			table_assistants.appendChild(row);
 		}
 
@@ -210,7 +211,7 @@ function loadList() {
 
 		load(content_list);
 
-		table_events = $(".list tbody")[0];
+		var table_events = $(".list tbody")[0];
 
 		while (table_events.childElementCount > 0) {
 			table_events.removeChild(table_events.lastElementChild);
@@ -235,6 +236,7 @@ function loadList() {
 			} else {
 				row.lastElementChild.onclick = undefined;
 			}
+			row.id = event.id;
 			table_events.appendChild(row);
 		}
 	});
@@ -317,6 +319,9 @@ function logout() {
 
 function removeEvent(event) {
 	console.log("removeEvent(" + event + ")");
+
+	$("#" + event).remove();
+
 	$.post("dummy.json", {eventid: event}, (res) => {
 		console.log(res);
 
@@ -326,6 +331,23 @@ function removeEvent(event) {
 
 function addAssistant(user, event) {
 	console.log("addAssistant(" + user + ", " + event + ")");
+
+	var table_assistants = $(".event tbody")[0];
+	table_row_assistant.innerHTML = table_row_assistant.innerHTML
+		.replace("${event_id}", event.id);
+
+	table_assistants.removeChild(table_assistants.lastElementChild);
+
+	var row = table_row_assistant.cloneNode(true);
+	row.innerHTML = row.innerHTML
+		.replace("${assistant}", user)
+		.replace("${assistant}", user);
+	row.innerHTML = row.innerHTML
+		.replace("disabled", "hoverable clickable");
+	row.lastElementChild.lastElementChild.classList.remove("hide");
+	row.id = user;
+	table_assistants.appendChild(row);
+
 	$.post("dummy.json", {username: user, eventid: event}, (res) => {
 		console.log(res);
 
@@ -333,9 +355,29 @@ function addAssistant(user, event) {
 	});
 }
 
-function removeAssistant(user, event) {
-	console.log("removeAssistant(" + user + ", " + event + ")");
-	$.post("dummy.json", {username: user, eventid: event}, (res) => {
+function removeAssistant(assistant, event) {
+	console.log("removeAssistant(" + assistant + ", " + event + ")");
+
+	var table_assistants = $(".event tbody")[0];
+	table_row_assistant.innerHTML = table_row_assistant.innerHTML
+		.replace("${event_id}", event.id);
+
+	$("#" + assistant).remove();
+
+	if (assistant === user) {
+		var row = table_row_assistant.cloneNode(true);
+		row.innerHTML = row.innerHTML
+			.replace("${assistant}", "")
+			.replace("hoverable", "")
+			.replace("glyphicon-remove", "glyphicon-plus")
+			.replace("disabled", "hoverable clickable")
+			.replace("remove", "add")
+			.replace("${assistant}", user);
+		row.lastElementChild.lastElementChild.classList.remove("hide");
+		table_assistants.appendChild(row);
+	}
+
+	$.post("dummy.json", {username: assistant, eventid: event}, (res) => {
 		console.log(res);
 
 		// TODO
