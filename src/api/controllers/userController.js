@@ -11,21 +11,16 @@ socket.identity = ident;
 var portDB = "1234";
 var ipDB = "127.0.0.1"
 var host = "tcp://" + ipDB + ":" + portDB; 
-// Connect to the server instance.
-socket.bind(host);
+ // Connect to the server instance.
+ socket.bind(host, function(){
+     console.log("Conectado a la BBDD");
+ });
 
 
 module.exports.existsUser = function (req, res) 
 {
-
-
-    //var username = ;
-    
-   // var m = component.getStringifyMessage(ent, "Paul", "", "put");
-    //console.log("Enviando 1...: " + m);
-   // socket.send([' ',m]);
-
    try{
+      
         var username = req.params.username;
         
         var m = component.getStringifyMessage(ent, username, "", "get");
@@ -48,8 +43,9 @@ module.exports.existsUser = function (req, res)
             return;
         });
 
-   }catch{
-
+   }catch(e) {
+    console.log("entering catch block");
+    console.log(e);
    }
 };
 
@@ -69,8 +65,13 @@ module.exports.getList = function (req, res)
         if(m2 == "Failed"){
             res.send("ERR");
         }else{
-            res.send("OK");
+            var mm = JSON.stringify(m2);
+
+            res.send(mm);
         }
+        //devuelve JSON con la lista (puede estar vacía)
+        // de eventos filtrada por (organizer === :username)
+         // o ERR (si no existe usuario
 
         return;
     });
@@ -80,7 +81,7 @@ module.exports.getList = function (req, res)
 module.exports.addUser = function (req, res)
 {
 
-    var username = "Paul";
+    var username = req.params.username;
     
     var m = component.getStringifyMessage(ent, username, "", "put");
     socket.send([' ',m]);

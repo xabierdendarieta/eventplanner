@@ -17,11 +17,12 @@ socket.bind(host);
 
 // Conseguir datos de un evento
 module.exports.getEvent = function (req, res){
-    var eventId = req.params.id;
+    
+    var eventId = req.params.eventid;
     
     var m = component.getStringifyMessage(ent, eventId, "", "get");
     socket.send([' ',m]);
-    console.log("Enviando... = " + m);
+    console.log("Enviando event... = " + m);
 
     // Input messages
     socket.on("message", (_,message) => { 
@@ -29,10 +30,10 @@ module.exports.getEvent = function (req, res){
         var m2 = mensaje.toString();
 
         if(m2 == "Failed"){
-            res.send("ERR EVENT");
+            res.send("ERR");
         }else{
-
-            res.send("OK EVENT");
+            var mm = JSON.stringify(m2);
+            res.send(mm);
         }
 
         return;
@@ -41,42 +42,77 @@ module.exports.getEvent = function (req, res){
 
 module.exports.addEvent = function (req, res)
 {
-    var id, name, description, datetime, organizer;
+    var id;
+    var name = req.params.name;
+    var description = req.params.description;
+    var datetime = req.params.datetime;
+    var organizer = req.params.organizer;
 
     var m = component.getEventDataInArgs(name, description, datetime, organizer);
-    var m2 = component.getStringifyMessage(ent, id, args, "put");
-    var data = index.socket.send([' ',m]);
-    var mensaje = JSON.parse(data.toString());
+    var m2 = component.getStringifyMessage(ent, id, m, "put");
+    console.log("MM= " + m2);
 
-    //return mensaje['id'];
-    res.send("OK");
+    // Input messages
+    socket.on("message", (_,message) => { 
+        let mensaje = message.toString();
+        var m2 = mensaje.toString();
+
+        if(m2 == "Failed"){
+            res.send("ERR");
+        }else{
+            var mm = JSON.stringify(m2);
+            res.send(mm);
+        }
+
+        return;
+    });
 }
 
 module.exports.removeEvent = function (req, res){
-    res.send("OK");
+    var id = res.param.eventid;
+    
+    var m2 = component.getStringifyMessage(ent, id, "", "remove");
+    console.log("MM= " + m2);
 
+    // Input messages
+    socket.on("message", (_,message) => { 
+        let mensaje = message.toString();
+        var m2 = mensaje.toString();
+
+        if(m2 == "Failed"){
+            res.send("ERR");
+        }else{
+            res.send("OK");
+        }
+
+        return;
+    });
 }
 
 module.exports.addAssistant = function (req, res)
 {
-    var name = req.params.name;
-    var m = component.getStringifyMessage(ent, res.name, "", "put");
-    var result = index.socket.send([' ',m]);
+    var username = res.para.username;
+    var id = res.param.eventid;
+    
+    var m2 = component.getStringifyMessage(ent, username, id, "put");
+    console.log("MM= " + m2);
 
-    return result;
+    // Input messages
+    socket.on("message", (_,message) => { 
+        let mensaje = message.toString();
+        var m2 = mensaje.toString();
+
+        if(m2 == "Failed"){
+            res.send("ERR");
+        }else{
+            res.send("OK");
+        }
+
+        return;
+    });
 }
 
 module.exports.removeAssistant = function (req, res)
 {
     
 }
-
-// Conseguir datos de un usuario
-/*function getUser(req, res){
-    var name = req.params.name;
-    var m = component.getStringifyMessage(ent, res.name, "", "get");
-    var result = index.socket.send([' ',m]);
-
-    return JSON.stringify(result);
-}
-*/

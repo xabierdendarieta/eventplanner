@@ -31,8 +31,10 @@ bdSocket.connect(host);
 
 // Listen 
 bdSocket.on("message", async (_, message) => {
+
 	// message received to JSON type
-    let m = message.toString();
+	let m = message.toString();
+	console.log("Mensaje: - "+ m);
 	let mensaje = JSON.parse(m);
 
 	// Check if user or event
